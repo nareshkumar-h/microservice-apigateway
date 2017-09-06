@@ -31,16 +31,12 @@ public class SimpleCorsFilter implements Filter {
 
 		 String REQUEST_ORIGIN_NAME = "Origin";
 		 String origin = req.getHeader(REQUEST_ORIGIN_NAME);
-		 Enumeration<String> headerNames = req.getHeaderNames();
-		 while(headerNames.hasMoreElements() ) {
-			 String headerName = headerNames.nextElement();
-			System.out.println(headerName  + "-" + req.getHeader(headerName));
-		 }
+		
 		 System.out.println("APIGateway-> Request from " + origin + "( " + req.getMethod() +")" + req.getRequestURI() );
 		if ("OPTIONS".equalsIgnoreCase(req.getMethod())) {
 			res.setHeader("Access-Control-Allow-Origin", "*");
 			res.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE, PATCH");
-			res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, Origin, Content-Type , Accept, Authorization, Access-Control-Allow-Credentials, Access-Control-Allow-Headers, Access-Control-Allow-Methods, Access-Control-Allow-Origin, Access-Control-Expose-Headers, Access-Control-Max-Age, Access-Control-Request-Headers, Access-Control-Request-Method, Age, Allow, Alternates, Content-Range, Content-Disposition, Content-Description");
+			res.setHeader("Access-Control-Allow-Headers", "*");
 			res.setHeader("Access-Control-Max-Age", "3600");
 			System.out.println("APIGateway Skip next request");
 		} else {
