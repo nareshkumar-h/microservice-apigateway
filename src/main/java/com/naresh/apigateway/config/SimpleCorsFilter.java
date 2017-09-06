@@ -1,7 +1,7 @@
 package com.naresh.apigateway.config;
 
-
 import java.io.IOException;
+import java.util.Enumeration;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -20,32 +20,42 @@ import org.springframework.stereotype.Component;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class SimpleCorsFilter implements Filter {
 
-    public SimpleCorsFilter() {
-    }
+	public SimpleCorsFilter() {
+	}
 
-    @Override
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        HttpServletResponse response = (HttpServletResponse) res;
-        HttpServletRequest request = (HttpServletRequest) req;
-      
-        if("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-        	response.setHeader("Access-Control-Allow-Origin", "*");
-        	response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE, PATCH");
-        	response.setHeader("Access-Control-Allow-Headers", "*");
-        	response.setHeader("Access-Control-Max-Age", "3600");
-        } else {
-        	
-        	 chain.doFilter(req, res);
-        }
-        
-        //Reference: https://github.com/spring-cloud/spring-cloud-netflix/issues/923 
-    }
+	@Override
+	public void doFilter(ServletRequest req1, ServletResponse res1, FilterChain chain)
+			throws IOException, ServletException {
+		HttpServletResponse res = (HttpServletResponse) res1;
+		HttpServletRequest req = (HttpServletRequest) req1;
 
-    @Override
-    public void init(FilterConfig filterConfig) {
-    }
+		 String REQUEST_ORIGIN_NAME = "Origin";
+		 String origin = req.getHeader(REQUEST_ORIGIN_NAME);
+		 Enumeration<String> headerNames = req.getHeaderNames();
+		 while(headerNames.hasMoreElements() ) {
+			 String headerName = headerNames.nextElement();
+			System.out.println(headerName  + "-" + req.getHeader(headerName));
+		 }
+		 System.out.println("APIGateway-> Request from " + origin + "( " + req.getMethod() +")" + req.getRequestURI() );
+		if ("OPTIONS".equalsIgnoreCase(req.getMethod())) {
+			res.setHeader("Access-Control-Allow-Origin", "*");
+			res.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE, PATCH");
+			res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, Origin, Content-Type , Accept, Authorization, Access-Control-Allow-Credentials, Access-Control-Allow-Headers, Access-Control-Allow-Methods, Access-Control-Allow-Origin, Access-Control-Expose-Headers, Access-Control-Max-Age, Access-Control-Request-Headers, Access-Control-Request-Method, Age, Allow, Alternates, Content-Range, Content-Disposition, Content-Description");
+			res.setHeader("Access-Control-Max-Age", "3600");
+			System.out.println("APIGateway Skip next request");
+		} else {
+			System.out.println("APIGateway Forwarding to next request");
+			res.setHeader("Access-Control-Allow-Origin", "*");
+			chain.doFilter(req, res);
+		}
 
-    @Override
-    public void destroy() {
-    }
+	}
+
+	@Override
+	public void init(FilterConfig filterConfig) {
+	}
+
+	@Override
+	public void destroy() {
+	}
 }
