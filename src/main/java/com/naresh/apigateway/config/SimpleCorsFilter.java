@@ -1,7 +1,6 @@
 package com.naresh.apigateway.config;
 
 import java.io.IOException;
-import java.util.Enumeration;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -36,7 +35,7 @@ public class SimpleCorsFilter implements Filter {
 		if ("OPTIONS".equalsIgnoreCase(req.getMethod())) {
 			res.setHeader("Access-Control-Allow-Origin", "*");
 			res.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE, PATCH");
-			res.setHeader("Access-Control-Allow-Headers", "*");
+			res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
 			res.setHeader("Access-Control-Max-Age", "3600");
 			System.out.println("APIGateway Skip next request");
 		} else {

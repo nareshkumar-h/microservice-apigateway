@@ -5,15 +5,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import com.naresh.apigateway.config.SimpleFilter;
+import com.netflix.ribbon.RequestTemplate;
 
 @CrossOrigin
 @EnableZuulProxy
 @SpringBootApplication
+
 public class ApiGatewayApplication {
 
 	public static void main(String[] args) {
@@ -42,4 +41,7 @@ public class ApiGatewayApplication {
 		urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfig);
 		return new CorsFilter(urlBasedCorsConfigurationSource);
 	}*/
+	
+	
+	
 }
